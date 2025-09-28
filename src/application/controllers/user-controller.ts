@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
-import { UserRequest } from '../dtos/user-request';
+import { buildUserRequest, UserRequest } from '../dtos/user-dtos';
 
 export const createUser = (request: Request, response: Response) => {
     try {
-        const user: UserRequest = request.body;
+       // const user: UserRequest = request.body;
+        const newUser = buildUserRequest(request.body);
 
 
         //esto va mientras pruebo validaciones
         response.status(201).json({
             ok: true,
             message: 'Usuario creado exitosamente',
-            user
+            user: newUser
         });
     } catch (error) {
         return response.status(500).json({

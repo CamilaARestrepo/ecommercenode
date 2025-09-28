@@ -1,10 +1,7 @@
-export enum UserStatus {
-    ACTIVE = 'ACTIVE',
-    INACTIVE = 'INACTIVE',
-    BLOCKED = 'BLOCKED',
-}
+import { UserStatus } from '../../../application/dtos/user-dtos';
 
-export interface UserRequest {
+export interface IUsers {
+    _id?: string;
     email: string;
     password: string;
     firstName: string;
@@ -14,7 +11,7 @@ export interface UserRequest {
     phone: string;
     roleId: string;
     gender: string;
-    birthDate: string;
+    birthDate: string; // o Date si prefieres manejarlo como objeto Date
     status: UserStatus;
     country: string;
     state: string;
