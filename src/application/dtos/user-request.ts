@@ -12,9 +12,9 @@ export interface UserRequest {
     idType: string;
     idNumber: string;
     phone: string;
-    // roleId: string;
+    roleId: string;
     gender: string;
-    birthDate: Date;
+    birthDate: string;
     status: UserStatus;
     country: string;
     state: string;
@@ -24,5 +24,5 @@ export interface UserRequest {
     postalCode: string;
     createdAt: Date;
     updatedAt: Date;
-    // paymentMethodId: string;
+    paymentMethodId: string;
 }
