@@ -1,7 +1,9 @@
+import 'dotenv/config'
 import express, {Application, Request, Response} from 'express';
 
 
-const PORT:number = 5000;
+//const PORT:number = 5000;
+const PORT:number = Number(process.env.PORT);
 
 const app:Application = express();
 
