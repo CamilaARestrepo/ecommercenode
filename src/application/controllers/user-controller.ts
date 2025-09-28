@@ -3,7 +3,7 @@ import { buildUserRequest, UserRequest } from '../dtos/user-dtos';
 
 export const createUser = (request: Request, response: Response) => {
     try {
-       // const user: UserRequest = request.body;
+
         const newUser = buildUserRequest(request.body);
 
 
