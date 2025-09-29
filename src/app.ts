@@ -2,10 +2,14 @@ import 'dotenv/config'
 import express, {Application, Request, Response} from 'express';
 
 import appRouter from './application/routes/app-router'
+import { dbConnection } from './infraestructura/config/config-db-mongo';
 
 
 
 const PORT:number = Number(process.env.PORT);
+
+// DB CONNECTION
+dbConnection();
 
 const app:Application = express();
 
