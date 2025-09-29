@@ -6,6 +6,7 @@ import { dbConnection } from './infraestructure/config/config-db-mongo';
 
 
 
+
 const PORT:number = Number(process.env.PORT);
 
 // DB CONNECTION
@@ -16,17 +17,6 @@ const app:Application = express();
 app.use(express.json());
 
 app.use(appRouter);
-
-/*
-app.use("/", (request:Request, response:Response)=>{
-    response.json({
-        ok: true,
-        message: "vamos bien!!!"
-    })
-
-})
-*/
-
 
 
 app.listen(PORT, ()=>{
