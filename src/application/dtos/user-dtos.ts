@@ -54,3 +54,52 @@ export function buildUserRequest(dto: UserRequest): IUsers {
         paymentMethodId: dto.paymentMethodId,
     };
 }
+
+
+export interface UserResponse {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    idType: string;
+    idNumber: string;
+    phone: string;
+    roleId: string;
+    gender: string;
+    birthDate: string;
+    status: UserStatus;
+    country: string;
+    state: string;
+    city: string;
+    neighborhood: string;
+    address: string;
+    postalCode: string;
+    createdAt: Date;
+    updatedAt: Date;
+    paymentMethodId: string;
+}
+
+export function buildUserResponse(user: IUsers & { _id?: string }): UserResponse {
+    return {
+        id: user._id ?? '',
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        idType: user.idType,
+        idNumber: user.idNumber,
+        phone: user.phone,
+        roleId: user.roleId,
+        gender: user.gender,
+        birthDate: user.birthDate,
+        status: user.status,
+        country: user.country,
+        state: user.state,
+        city: user.city,
+        neighborhood: user.neighborhood,
+        address: user.address,
+        postalCode: user.postalCode,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        paymentMethodId: user.paymentMethodId,
+    };
+}

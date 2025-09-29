@@ -1,22 +1,27 @@
 import { Request, Response } from 'express';
-import { buildUserRequest, UserRequest } from '../dtos/user-dtos';
+import { buildUserRequest, UserRequest,buildUserResponse } from '../dtos/user-dtos';
+import { saveUser } from '../../domain/services/user-services';
 
-export const createUser = (request: Request, response: Response) => {
+import { MongoUserRepository } from '../../infraestructure/repositories/mongo-user';
+
+const userRepo = new MongoUserRepository();
+
+export const createUser = async (request: Request, response: Response) => {
     try {
 
         const newUser = buildUserRequest(request.body);
 
+        const result = await saveUser(userRepo,newUser);
 
-        //esto va mientras pruebo validaciones
         response.status(201).json({
             ok: true,
-            message: 'Usuario creado exitosamente',
-            user: newUser
+            message: 'User created successfully',
+            user: buildUserResponse(result)
         });
     } catch (error) {
         return response.status(500).json({
             ok: false,
-            message: 'Error interno del servidor',
+            message: 'Internal server error',
             error: (error as Error).message
         });
     }

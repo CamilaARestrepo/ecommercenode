@@ -3,11 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 export const useParamValidation = (request: Request, response: Response, next: NextFunction) => {
     const { email, password, firstName, phone,birthDate } = request.body;
 
-
     if (!email) {
         return response.status(422).json({
             ok: false,
-            error: 'El campo email es obligatorio'
+            error: 'The email field is required'
         });
     }
 
@@ -16,23 +15,22 @@ export const useParamValidation = (request: Request, response: Response, next: N
     if (!emailRegex.test(email)) {
         return response.status(422).json({ 
             ok: false, 
-            error: 'El email no tiene un formato válido' 
+            error: 'The email format is invalid' 
         });
     }
-
-
 
     if (!password) {
         return response.status(422).json({ 
             ok: false, 
-            error: 'El campo password es obligatorio' 
+            error: 'The password field is required' 
         });
-    }    // ...en tu middleware de validación...
+    }
+
     const birthDateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthDate || !birthDateRegex.test(birthDate)) {
         return response.status(422).json({
             ok: false,
-            error: 'El campo birthDate es obligatorio y debe tener formato YYYY-MM-DD'
+            error: 'The birthDate field is required and must have format YYYY-MM-DD'
         });
     }
     const birth = new Date(birthDate);
@@ -40,7 +38,7 @@ export const useParamValidation = (request: Request, response: Response, next: N
     if (birth >= now) {
         return response.status(422).json({
             ok: false,
-            error: 'La fecha de nacimiento debe ser una fecha en el pasado'
+            error: 'The birth date must be a date in the past'
         });
     }
 
@@ -49,18 +47,16 @@ export const useParamValidation = (request: Request, response: Response, next: N
     if (!passwordRegex.test(password)) {
         return response.status(422).json({
             ok: false,
-            error: 'El password debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y símbolos.'
+            error: 'The password must be at least 8 characters and include uppercase, lowercase, numbers, and symbols.'
         });
     }
-
 
     if (!firstName) {
         return response.status(422).json({ 
             ok: false, 
-            error: 'El campo name es obligatorio' 
+            error: 'The firstName field is required' 
         });
     }
-
 
     if (phone !== undefined && phone !== null && phone !== "") {
         const phoneStr = String(phone);
@@ -68,7 +64,7 @@ export const useParamValidation = (request: Request, response: Response, next: N
         if (!phoneRegex.test(phoneStr)) {
             return response.status(422).json({
                 ok: false,
-                error: 'El campo phone debe tener formato colombiano (10 dígitos, iniciar con 3)'
+                error: 'The phone must follow Colombian format (10 digits, starting with 3)'
             });
         }
     }

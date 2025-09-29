@@ -23,7 +23,7 @@ export class User implements IUsers {
     updatedAt: Date;
     paymentMethodId: string;
 
-    constructor(user: IUsers) {
+    constructor(user: IUsers & { id?: string }) {
         this._id = user._id;
         this.email = user.email;
         this.password = user.password;

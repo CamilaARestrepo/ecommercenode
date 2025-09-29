@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express, {Application, Request, Response} from 'express';
 
 import appRouter from './application/routes/app-router'
-import { dbConnection } from './infraestructura/config/config-db-mongo';
+import { dbConnection } from './infraestructure/config/config-db-mongo';
 
 
 
