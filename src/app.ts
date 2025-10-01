@@ -1,21 +1,22 @@
+import 'dotenv/config'
 import express, {Application, Request, Response} from 'express';
 
+import appRouter from './application/routes/app-router'
+import { dbConnection } from './infraestructure/config/config-db-mongo';
 
-const PORT:number = 5000;
+
+
+
+const PORT:number = Number(process.env.PORT);
+
+// DB CONNECTION
+dbConnection();
 
 const app:Application = express();
 
 app.use(express.json());
 
-
-app.use("/", (request:Request, response:Response)=>{
-    response.json({
-        ok: true,
-        message: "vamos bien!!!"
-    })
-
-})
-
+app.use(appRouter);
 
 
 app.listen(PORT, ()=>{
