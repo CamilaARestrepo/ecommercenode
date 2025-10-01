@@ -28,3 +28,17 @@ export class MongoUserRepository implements IUserRepository {
         return new User(plainUser as IUsers);
     }
 }
+
+    async findById(id: string): Promise<User> {
+        const resutl = await UserModel.findById(id)
+        if (!resutl) {
+            return null;
+        }
+        const userObject = resutl.toObject();
+        if (userObject._id && typeof userObject._id !== 'string') {
+            userObject._id = userObject._id.toString();
+        }
+        return new User(userObject as IUsers);
+    }
+}
+
