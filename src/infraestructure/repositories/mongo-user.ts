@@ -19,16 +19,15 @@ export class MongoUserRepository implements IUserRepository {
         if (!userDoc) {
             return null;
         }
-        
+
         const plainUser = userDoc.toObject();
         if (plainUser._id && typeof plainUser._id !== 'string') {
             plainUser._id = plainUser._id.toString();
         }
-        
+
         return new User(plainUser as IUsers);
     }
-}
-
+    
     async findById(id: string): Promise<User> {
         const resutl = await UserModel.findById(id)
         if (!resutl) {
