@@ -14,6 +14,21 @@ export class MongoUserRepository implements IUserRepository {
         return new User(plainUser as IUsers);
     }
 
+    async findByEmail(email: string): Promise<User | null> {
+        const userDoc = await UserModel.findOne({ email });
+        if (!userDoc) {
+            return null;
+        }
+        
+        const plainUser = userDoc.toObject();
+        if (plainUser._id && typeof plainUser._id !== 'string') {
+            plainUser._id = plainUser._id.toString();
+        }
+        
+        return new User(plainUser as IUsers);
+    }
+}
+
     async findById(id: string): Promise<User> {
         const resutl = await UserModel.findById(id)
         if (!resutl) {
@@ -26,3 +41,4 @@ export class MongoUserRepository implements IUserRepository {
         return new User(userObject as IUsers);
     }
 }
+

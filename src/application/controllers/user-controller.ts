@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+
 import { buildUserRequest, UserRequest, buildUserResponse } from '../dtos/user-dtos';
-import { saveUser, findUserById } from '../../domain/services/user-services';
+import { saveUser,findUserById, hashPassword } from '../../domain/services/user-services';
+
 
 import { MongoUserRepository } from '../../infraestructure/repositories/mongo-user';
 
@@ -10,6 +12,8 @@ export const createUser = async (request: Request, response: Response) => {
     try {
 
         const newUser = buildUserRequest(request.body);
+        
+        newUser.password = await hashPassword(newUser.password);
 
         const result = await saveUser(userRepo, newUser);
 

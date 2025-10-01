@@ -20,14 +20,18 @@
   },
   "homepage": "https://github.com/NMEJIA93/electiva2_ecommerce_enviosperdidos#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.3.0",
     "express": "^5.1.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.2",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
