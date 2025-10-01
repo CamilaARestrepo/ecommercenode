@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import userRouter from './users-route';
+import authRouter from './auth-route';
 
 // Swagger UI setup
 import swaggerUi from 'swagger-ui-express';
@@ -19,5 +20,6 @@ appRouter.get('/', (request: Request, response: Response) => {
 appRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 appRouter.use('/api/v1', userRouter);
+appRouter.use('/api/v1', authRouter);
 
 export default appRouter;
