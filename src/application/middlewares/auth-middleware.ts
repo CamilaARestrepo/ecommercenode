@@ -30,3 +30,14 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         );
     }
 };
+
+
+export function authorizeRole(requiredRole: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user = req.user;
+        if (!user || user.role !== requiredRole) {
+            return res.status(403).json({ error: 'You do not have permission to perform this action' });
+        }
+        next();
+    };
+}
