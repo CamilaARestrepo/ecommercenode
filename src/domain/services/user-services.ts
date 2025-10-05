@@ -41,13 +41,24 @@ export const comparePassword = async (password: string, hashedPassword: string):
 export const findUserById = async (userRepo: IUserRepository, userId: string) => {
     try {
 
-    const user = await userRepo.findById(userId);
-    if (user) {
-        return user;
-    }
-    return null
+        const user = await userRepo.findById(userId);
+        if (user) {
+            return user;
+        }
+        return null
     } catch (error) {
         throw new Error(`[ERROR TO SERVICE] - Error finding user by ID: ${error}`);
     }
 }
+
+export const findAllUsers = async (userRepo: IUserRepository) => {
+
+
+    try {
+        return await userRepo.findAll();
+    } catch (error) {
+
+    }
+};
+
 

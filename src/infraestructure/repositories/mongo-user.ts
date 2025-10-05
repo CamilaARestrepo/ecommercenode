@@ -39,5 +39,17 @@ export class MongoUserRepository implements IUserRepository {
         }
         return new User(userObject as IUsers);
     }
+
+    async findAll(): Promise<User[]> {
+        const users = await UserModel.find();
+        return users.map(userDoc => {
+            const plainUser = userDoc.toObject();
+            if (plainUser._id && typeof plainUser._id !== 'string') {
+                plainUser._id = plainUser._id.toString();   
+            }
+            return new User(plainUser as IUsers);
+        });
+    }
+
 }
 
