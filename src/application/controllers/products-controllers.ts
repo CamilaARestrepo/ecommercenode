@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { saveProduct } from '../../domain/services/product-services';
 import { buildProductRequest, ProductRequest } from '../dtos/product-dtos';
 import { MongoProductRepository } from '../../infraestructure/repositories/mongo-products';
+import { ProductModel } from '../../infraestructure/database/product-mongo';
 
 const productRepo = new MongoProductRepository();
 
@@ -22,3 +23,4 @@ export const createProduct = async (request : Request, response : Response) => {
         });
     }
 }
+

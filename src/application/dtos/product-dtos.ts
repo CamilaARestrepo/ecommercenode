@@ -9,14 +9,14 @@ export interface ProductRequest {
     images?: string[];
 }
 
-export function buildProductRequest(dti: ProductRequest): IProduct {
+export function buildProductRequest(dto: ProductRequest): IProduct {
     return {
         id: '',
-        name: dti.name,
-        description: dti.description,
-        price: dti.price,
-        stock: dti.stock,
-        categoryId: dti.categoryId,
-        images: dti.images || []
+        name: dto.name,
+        description: dto.description,
+        price: dto.price,
+        stock: dto.stock,
+        categoryId: dto.categoryId,
+        images: dto.images || []
     };
 }
