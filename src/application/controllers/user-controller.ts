@@ -29,6 +29,7 @@ export const createUser = async (request: Request, response: Response) => {
             user: buildUserResponse(result)
         });
     } catch (error) {
+        console.error(error);
         return response.status(500).json({
             ok: false,
             message: 'Internal server error',
