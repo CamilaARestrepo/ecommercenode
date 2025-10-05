@@ -1,7 +1,7 @@
 import { IUserRepository } from "../repositories/IUser-repository";
 import { User } from "../entities/User";
 import { IUsers } from "../models/interfaces/IUsers";
-import {isPasswordSecure} from "../use-cases/user-cases"
+import {isPasswordSecure} from "../business-rules/user-rules"
 import * as bcrypt from 'bcryptjs';
 
 export const saveUser = async (userRepo: IUserRepository, user: IUsers) => {
