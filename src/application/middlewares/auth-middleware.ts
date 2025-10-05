@@ -41,3 +41,16 @@ export function authorizeRole(requiredRole: string) {
         next();
     };
 }
+
+export function authorizeProfileAccess(request: Request, response: Response, next: NextFunction) {
+    const userIdFromToken = request.user?.id;
+    const userIdFromParams = request.params.id;
+
+    if (!userIdFromToken || userIdFromToken !== userIdFromParams) {
+        return response.status(403).json({
+            ok: false,
+            error: 'You do not have permission to access or modify this profile'
+        });
+    }
+    next();
+}

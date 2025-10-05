@@ -11,6 +11,14 @@ export const saveUser = async (userRepo: IUserRepository, user: IUsers) => {
         throw new Error(`[ERROR TO SERVICE] - Error saving user: ${error}`);
     }
 };
+export const updateUserById = async (userRepo: IUserRepository, userId: string, updatedData: Partial<IUsers>) => {
+    try {
+        return await userRepo.update(userId, updatedData);
+    }catch (error) {
+        throw new Error(`[ERROR TO SERVICE] - Error updating user: ${error}`);
+    }
+};
+
 
 
 export const findUserByEmail = async (userRepo: IUserRepository, email: string): Promise<User | null> => {
