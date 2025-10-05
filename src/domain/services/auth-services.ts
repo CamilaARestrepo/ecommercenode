@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { IUserRepository } from "../repositories/IUser-repository";
-import { findUserByEmail, comparePassword } from "./user-services";
+import { findUserByEmail, comparePassword, updateUserById } from "./user-services";
 import { LoginRequest } from "../../application/dtos/auth-dtos";
 import { JWTConfig } from "../../infraestructure/config/jwt-config";
+import { MongoLoginAttemptRepository } from '../../infraestructure/repositories/mongo-login';
+import { UserStatus } from '../../application/dtos/user-dtos';
+
+const loginAttemptRepo = new MongoLoginAttemptRepository();
 
 export const loginUser = async (userRepo: IUserRepository, loginData: LoginRequest) => {
     try {
@@ -12,10 +16,23 @@ export const loginUser = async (userRepo: IUserRepository, loginData: LoginReque
             return { success: false, message: 'Invalid credentials (wrong email or password)' };
         }
 
+        if (user.status === UserStatus.BLOCKED) {
+            return { success: false, message: 'User is blocked. Please contact the administrator.' };
+        }
 
         const isPasswordValid = await comparePassword(loginData.password, user.password);
         
         if (!isPasswordValid) {
+            try {
+                const idNumber = user.idNumber;
+                const attempt = await loginAttemptRepo.incrementRetries(idNumber);
+                const retries = attempt?.retries ?? 0;
+                if (retries >= 3) {
+                    await updateUserById(userRepo, user._id, { status: UserStatus.BLOCKED });
+                }
+            } catch (err) {
+            }
+
             return { success: false, message: 'Invalid credentials (wrong email or password)' };
         }
 
@@ -26,6 +43,12 @@ export const loginUser = async (userRepo: IUserRepository, loginData: LoginReque
             lastName: user.lastName,
             roleId: user.roleId
         });
+
+        try {
+            const idNumber = user.idNumber;
+            await loginAttemptRepo.resetRetries(idNumber, token);
+        } catch (err) {
+        }
 
         return {
             success: true,
