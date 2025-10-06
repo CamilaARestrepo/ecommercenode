@@ -3,10 +3,12 @@ import { IProduct } from "../../domain/models/interfaces/IProduct";
 export interface ProductRequest {
     name: string;
     description: string;
-    price: number;
+    cost: number;
     stock: number;
     categoryId: string;
     images?: string[];
+    providers: string[];
+
 }
 
 export function buildProductRequest(dto: ProductRequest): IProduct {
@@ -14,9 +16,9 @@ export function buildProductRequest(dto: ProductRequest): IProduct {
         id: '',
         name: dto.name,
         description: dto.description,
-        price: dto.price,
-        stock: dto.stock,
+        cost: dto.cost,
         categoryId: dto.categoryId,
-        images: dto.images || []
+        images: dto.images || [],
+        providers: dto.providers || []
     };
 }

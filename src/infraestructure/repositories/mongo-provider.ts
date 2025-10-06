@@ -2,6 +2,7 @@ import { IProviderRepository } from '../../domain/repositories/IProvider-reposit
 import { Provider } from '../../domain/entities/Providier';
 import { ProviderModel } from '../database/provider-mongo';
 import { IProvider } from '../../domain/models/interfaces/IProvidier';
+import { ProductModel } from '../database/product-mongo';
 
 export class MongoProviderReposiitory implements IProviderRepository {
     async save(provider: Provider): Promise<Provider> {
@@ -36,5 +37,26 @@ export class MongoProviderReposiitory implements IProviderRepository {
             id: plainProvider._id ? plainProvider._id.toString() : '',
             name: plainProvider.name
         });
+    }
+    async update(provider: Provider): Promise<Provider> {
+        const updated = await ProviderModel.findByIdAndUpdate(provider.id, provider, { new: true }).exec();
+        if (!updated) {
+            throw new Error('Provider not found for update');
+        }
+        const plainProvider = updated.toObject();
+        return new Provider({
+            id: plainProvider._id ? plainProvider._id.toString() : '',
+            name: plainProvider.name
+        });
+    }
+    async delete(id: string): Promise<void> {
+        const result = await ProviderModel.findByIdAndDelete(id).exec();
+        if (!result) {
+            throw new Error('Provider not found for deletion');
+        }
+        await ProductModel.updateMany(
+            { providers: id },
+            { $pull: { providers: id } }
+        );
     }
 }
