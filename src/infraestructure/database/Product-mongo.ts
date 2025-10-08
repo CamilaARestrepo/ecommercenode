@@ -13,4 +13,4 @@ const ProductSchema = new mongoose.Schema<IProductDocument>({
     classification: { type: String, default: 'Vigenete' }
 });
 
-export const ProductModel = mongoose.model<IProductDocument>('Product', ProductSchema);
+export const ProductModel = mongoose.models.Product || mongoose.model<IProductDocument>('Product', ProductSchema);
