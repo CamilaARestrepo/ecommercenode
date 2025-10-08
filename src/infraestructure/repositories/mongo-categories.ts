@@ -3,7 +3,7 @@ import { Categories } from "../../domain/entities/Categories";
 import { CategoriesModel } from "../database/categories-mongo";
 import { ICategories } from "../../domain/models/interfaces/ICategories";
 import { Product } from "../../domain/entities/Product";
-import { ProductModel } from "../database/product-mongo";
+import { ProductModel } from "../database/Product-mongo";
 
 export class MongoCategoriesRepository implements ICategoriesRepository {
     async save(category: Categories): Promise<Categories> {
