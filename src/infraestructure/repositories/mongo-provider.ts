@@ -2,7 +2,7 @@ import { IProviderRepository } from '../../domain/repositories/IProvider-reposit
 import { Provider } from '../../domain/entities/Providier';
 import { ProviderModel } from '../database/provider-mongo';
 import { IProvider } from '../../domain/models/interfaces/IProvidier';
-import { ProductModel } from '../database/product-mongo';
+import { ProductModel } from '../database/Product-mongo';
 
 export class MongoProviderReposiitory implements IProviderRepository {
     async save(provider: Provider): Promise<Provider> {
