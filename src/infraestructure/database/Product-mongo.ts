@@ -9,7 +9,8 @@ const ProductSchema = new mongoose.Schema<IProductDocument>({
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     providers: [{type: Schema.Types.ObjectId, ref: "Provider"}],
-    images: [{ type: String }]
+    images: [{ type: String }],
+    classification: { type: String, default: 'Vigenete' }
 });
 
 export const ProductModel = mongoose.model<IProductDocument>('Product', ProductSchema);

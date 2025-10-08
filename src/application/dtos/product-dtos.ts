@@ -8,6 +8,7 @@ export interface ProductRequest {
     categoryId: string;
     images?: string[];
     providers: string[];
+    classification?: string;
 
 }
 
@@ -19,6 +20,7 @@ export function buildProductRequest(dto: ProductRequest): IProduct {
         cost: dto.cost,
         categoryId: dto.categoryId,
         images: dto.images || [],
-        providers: dto.providers || []
+        providers: dto.providers || [],
+        classification: dto.classification
     };
 }

@@ -6,4 +6,5 @@ export interface IProduct {
     id?: string;
     images?: string[];
     providers: string[];
+    classification?: string;
 }

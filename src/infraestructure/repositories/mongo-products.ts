@@ -4,6 +4,7 @@ import { ProductModel } from "../database/product-mongo";
 import { IProduct } from "../../domain/models/interfaces/IProduct";
 import { CategoriesModel } from "../database/categories-mongo";
 import { ProviderModel } from "../database/provider-mongo";
+import { InventoryModel } from "../database/inventory-mongo";
 
 export class MongoProductRepository implements IProductRepository {
   async save(product: Product): Promise<Product> {
@@ -31,6 +32,14 @@ export class MongoProductRepository implements IProductRepository {
     }
     const created = await ProductModel.create(product);
     const plainProduct = created.toObject();
+
+    await InventoryModel.create({
+      productId: plainProduct._id,
+      price: 0,
+      stock: 0,
+      reservedStock: 0,
+    });
+
     const mappedProduct = {
       ...plainProduct,
       id: plainProduct._id.toString(),
@@ -103,5 +112,6 @@ export class MongoProductRepository implements IProductRepository {
     if (result.deletedCount === 0) {
       throw new Error("Product not found or already deleted");
     }
+    await InventoryModel.deleteOne({ productId: id }).exec();
   }
 }
