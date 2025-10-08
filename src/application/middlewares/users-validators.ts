@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { UserStatus } from '../dtos/user-dtos';
+
 
 export const useParamValidation = (request: Request, response: Response, next: NextFunction) => {
     const {
@@ -21,6 +23,15 @@ export const useParamValidation = (request: Request, response: Response, next: N
         postalCode
     } = request.body;
 
+        const allowedStatus = Object.values(UserStatus);
+        if (!status) {
+            request.body.status = UserStatus.ACTIVE;
+        } else if (!allowedStatus.includes(status)) {
+            return response.status(422).json({
+                ok: false,
+                error: `The status field must be one of: ${allowedStatus.join(', ')}`
+            });
+        }
     // email
     if (!email) return response.status(422).json({ ok: false, error: 'The email field is required' });
     const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -39,6 +50,7 @@ export const useParamValidation = (request: Request, response: Response, next: N
     if (!idType) return response.status(422).json({ ok: false, error: 'The idType field is required' });
     if (!idNumber) return response.status(422).json({ ok: false, error: 'The idNumber field is required' });
 
+    /*
     // gender
     if (!gender) return response.status(422).json({ ok: false, error: 'The gender field is required' });
 
@@ -67,5 +79,6 @@ export const useParamValidation = (request: Request, response: Response, next: N
     if (!address) return response.status(422).json({ ok: false, error: 'The address field is required' });
     if (!postalCode) return response.status(422).json({ ok: false, error: 'The postalCode field is required' });
 
+    */
     next();
 };

@@ -30,3 +30,27 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         );
     }
 };
+
+
+export function authorizeRole(requiredRole: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user = req.user;
+        if (!user || user.role !== requiredRole) {
+            return res.status(403).json({ error: 'You do not have permission to perform this action' });
+        }
+        next();
+    };
+}
+
+export function authorizeProfileAccess(request: Request, response: Response, next: NextFunction) {
+    const userIdFromToken = request.user?.id;
+    const userIdFromParams = request.params.id;
+
+    if (!userIdFromToken || userIdFromToken !== userIdFromParams) {
+        return response.status(403).json({
+            ok: false,
+            error: 'You do not have permission to access or modify this profile'
+        });
+    }
+    next();
+}

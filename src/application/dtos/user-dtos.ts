@@ -63,25 +63,26 @@ export interface UserResponse {
     lastName: string;
     idType: string;
     idNumber: string;
-    phone: string;
+    phone?: string;
     roleId: string;
-    gender: string;
-    birthDate: string;
-    status: UserStatus;
-    country: string;
-    state: string;
-    city: string;
-    neighborhood: string;
-    address: string;
-    postalCode: string;
-    createdAt: Date;
-    updatedAt: Date;
-    paymentMethodId: string;
+    gender?: string;
+    birthDate?: string;
+    status: string;
+    country?: string;
+    state?: string;
+    city?: string;
+    neighborhood?: string;
+    address?: string;
+    postalCode?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    // No password!
 }
 
-export function buildUserResponse(user: IUsers & { _id?: string }): UserResponse {
+
+export function buildUserResponse(user: any): UserResponse {
     return {
-        id: user._id ?? '',
+        id: user._id ?? user.id ?? '',
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -99,7 +100,6 @@ export function buildUserResponse(user: IUsers & { _id?: string }): UserResponse
         address: user.address,
         postalCode: user.postalCode,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        paymentMethodId: user.paymentMethodId,
+        updatedAt: user.updatedAt
     };
 }

@@ -1,16 +1,38 @@
 import { IUserRepository } from "../repositories/IUser-repository";
 import { User } from "../entities/User";
 import { IUsers } from "../models/interfaces/IUsers";
+import {isPasswordSecure} from "../business-rules/user-rules"
 import * as bcrypt from 'bcryptjs';
 
 export const saveUser = async (userRepo: IUserRepository, user: IUsers) => {
     try {
+
+        // Verificar email único
+        const existingUser = await userRepo.findByEmail(user.email);
+        if (existingUser) {
+            throw new Error('Email must be unique "email already in use"');
+        }
+        // Validar contraseña segura
+        if (!isPasswordSecure(user.password)) {
+            throw new Error('Password must be at least 8 characters and include uppercase, lowercase, and numbers');
+        }
+
         const newUser = new User(user);
+
         return await userRepo.save(newUser);
+
     } catch (error) {
         throw new Error(`[ERROR TO SERVICE] - Error saving user: ${error}`);
     }
 };
+export const updateUserById = async (userRepo: IUserRepository, userId: string, updatedData: Partial<IUsers>) => {
+    try {
+        return await userRepo.update(userId, updatedData);
+    } catch (error) {
+        throw new Error(`[ERROR TO SERVICE] - Error updating user: ${error}`);
+    }
+};
+
 
 
 export const findUserByEmail = async (userRepo: IUserRepository, email: string): Promise<User | null> => {
@@ -41,13 +63,24 @@ export const comparePassword = async (password: string, hashedPassword: string):
 export const findUserById = async (userRepo: IUserRepository, userId: string) => {
     try {
 
-    const user = await userRepo.findById(userId);
-    if (user) {
-        return user;
-    }
-    return null
+        const user = await userRepo.findById(userId);
+        if (user) {
+            return user;
+        }
+        return null
     } catch (error) {
         throw new Error(`[ERROR TO SERVICE] - Error finding user by ID: ${error}`);
     }
 }
+
+export const findAllUsers = async (userRepo: IUserRepository) => {
+
+
+    try {
+        return await userRepo.findAll();
+    } catch (error) {
+
+    }
+};
+
 
