@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { saveProduct, findProducts, findProductById, updateProductById, deleteProductById} from '../../domain/services/product-services';
 import { buildProductRequest, ProductRequest } from '../dtos/product-dtos';
 import { MongoProductRepository } from '../../infraestructure/repositories/mongo-products';
-import { ProductModel } from '../../infraestructure/database/Product-mongo';
 import { IProduct } from '../../domain/models/interfaces/IProduct';
 
 
