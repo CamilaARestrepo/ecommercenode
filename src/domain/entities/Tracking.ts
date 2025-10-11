@@ -10,6 +10,7 @@ export enum TrackingStatus {
 export interface StatusHistory {
   status: TrackingStatus;
   timestamp: Date;
+  changedBy?: string;
 }
 
 export interface NotificationHistory {

@@ -1,32 +1,46 @@
-import TrackingModel, { ITrackingMongo } from '../database/tracking-mongo';
-import { ITrackingRepository } from '../../domain/repositories/ITracking-repository';
-import { ITracking } from '../../domain/models/interfaces/ITracking';
-import { TrackingStatus } from '../../domain/entities/Tracking';
+  import TrackingModel, { ITrackingMongo } from '../database/tracking-mongo';
+  import { ITrackingRepository } from '../../domain/repositories/ITracking-repository';
+  import { ITracking } from '../../domain/models/interfaces/ITracking';
+  import { TrackingStatus } from '../../domain/entities/Tracking';
 
-export class MongoTrackingRepository implements ITrackingRepository {
-  async createTracking(tracking: ITracking): Promise<ITracking> {
-    const created = await TrackingModel.create(tracking);
-    return created.toObject();
-  }
+  export class MongoTrackingRepository implements ITrackingRepository {
+    async createTracking(tracking: ITracking, changedBy?: string): Promise<ITracking> {
+      // Si changedBy se provee, agregarlo al primer statusHistory
+      if (changedBy && tracking.statusHistory && tracking.statusHistory.length > 0) {
+        tracking.statusHistory[0].changedBy = changedBy;
+      }
+      const created = await TrackingModel.create(tracking);
+      if (!created.trackingNumber && created.trackingSeq && created.trackingDate) {
+        const trackingNumber = `TRK-${created.trackingDate}-${String(created.trackingSeq).padStart(5, '0')}`;
+        created.trackingNumber = trackingNumber;
+        await created.save();
+      }
+      return created.toObject();
+    }
 
-  async getTrackingByOrderNumber(orderNumber: string, userId: string): Promise<ITracking | null> {
-    const found = await TrackingModel.findOne({ orderNumber, userId });
-    return found ? found.toObject() : null;
-  }
+    async getTrackingByOrderNumber(orderNumber: string): Promise<ITracking | null> {
+      const found = await TrackingModel.findOne({ orderNumber });
+      return found ? found.toObject() : null;
+    }
 
-  async updateTrackingStatus(trackingNumber: string, status: TrackingStatus): Promise<ITracking> {
-    const updated = await TrackingModel.findOneAndUpdate(
-      { trackingNumber },
-      { $set: { currentStatus: status }, $push: { statusHistory: { status, timestamp: new Date() } } },
-      { new: true }
-    );
-    return updated.toObject();
-  }
+    async updateTrackingStatus(trackingNumber: string, status: TrackingStatus, changedBy?: string): Promise<ITracking> {
+      const updated = await TrackingModel.findOneAndUpdate(
+        { trackingNumber },
+        { $set: { currentStatus: status }, $push: { statusHistory: { status, timestamp: new Date(), changedBy: changedBy || 'system' } } },
+        { new: true }
+      );
+      return updated.toObject();
+    }
 
-  async addNotification(trackingNumber: string, notification: any): Promise<void> {
-    await TrackingModel.findOneAndUpdate(
-      { trackingNumber },
-      { $push: { notifications: notification } }
-    );
+    async addNotification(trackingNumber: string, notification: any): Promise<void> {
+      await TrackingModel.findOneAndUpdate(
+        { trackingNumber },
+        { $push: { notifications: notification } }
+      );
+    }
+
+    async findTrackingsByUser(userId: string): Promise<ITracking[]> {
+      const found = await TrackingModel.find({ userId });
+      return found.map(doc => doc.toObject());
+    }
   }
-}
