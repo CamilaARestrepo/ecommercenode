@@ -3,10 +3,10 @@ import { IUserRepository } from "../repositories/IUser-repository";
 import { findUserByEmail, comparePassword, updateUserById } from "./user-services";
 import { LoginRequest } from "../../application/dtos/auth-dtos";
 import { JWTConfig } from "../../infraestructure/config/jwt-config";
-import { MongoLoginAttemptRepository } from '../../infraestructure/repositories/mongo-login';
+import { MongoLoginRepository } from '../../infraestructure/repositories/mongo-login';
 import { UserStatus } from '../../application/dtos/user-dtos';
 
-const loginAttemptRepo = new MongoLoginAttemptRepository();
+const loginAttemptRepo = new MongoLoginRepository();
 
 export const loginUser = async (userRepo: IUserRepository, loginData: LoginRequest) => {
     try {
@@ -25,7 +25,8 @@ export const loginUser = async (userRepo: IUserRepository, loginData: LoginReque
         if (!isPasswordValid) {
             try {
                 const idNumber = user.idNumber;
-                const attempt = await loginAttemptRepo.incrementRetries(idNumber);
+                const email = user.email;
+                const attempt = await loginAttemptRepo.incrementRetries(idNumber, email);
                 const retries = attempt?.retries ?? 0;
                 if (retries >= 3) {
                     await updateUserById(userRepo, user._id, { status: UserStatus.BLOCKED });
@@ -46,7 +47,8 @@ export const loginUser = async (userRepo: IUserRepository, loginData: LoginReque
 
         try {
             const idNumber = user.idNumber;
-            await loginAttemptRepo.resetRetries(idNumber, token);
+            const email = user.email;
+            await loginAttemptRepo.resetRetries(idNumber, token, email);
         } catch (err) {
         }
 

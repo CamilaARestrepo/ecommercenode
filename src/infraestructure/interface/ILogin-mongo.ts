@@ -4,6 +4,7 @@ export interface ILoginDocument {
     retries: number;
     updatedAt?: Date;
     createdAt?: Date;
+    email?: string;
 }
 
 export default ILoginDocument;
