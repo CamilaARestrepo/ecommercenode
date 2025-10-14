@@ -108,6 +108,11 @@ export class MongoProductRepository implements IProductRepository {
     } as unknown as IProduct);
   }
   async delete(id: string): Promise<void> {
+    const inventory = await InventoryModel.findOne({ productId: id }).exec();
+    console.log(inventory)
+    if (inventory.reservedStock >0){
+      throw new Error ("cannot delete product with reserved stock");
+    }
     const result = await ProductModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
       throw new Error("Product not found or already deleted");

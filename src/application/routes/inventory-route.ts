@@ -5,7 +5,7 @@ import { validateInventory } from '../middlewares/inventory-middleware';
 
 const inventoryRouter: Router = express.Router();
 
-inventoryRouter.put('/product/inventory/:id', authenticateToken, authorizeRole(["admin"]), validateInventory, updateInventory);
-inventoryRouter.patch('/product/inventory/reserved/:id', authenticateToken, authorizeRole(["admin"]), validateInventory, updateReservedStock);
+inventoryRouter.put('/admin/product/inventory/:id', authenticateToken, authorizeRole(["admin"]), validateInventory, updateInventory);
+inventoryRouter.patch('/user/cart/product/inventory/hold/:id', authenticateToken, authorizeRole(["admin","user"]), validateInventory, updateReservedStock);
 
 export default inventoryRouter;

@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import providerRouter from './provider-route';
 import categoryRouter from './categories-route';
+import catalogRouter from './catalog-route';
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 const appRouter: Router = Router();
@@ -29,6 +30,7 @@ appRouter.use('/api/v1', productRouter);
 appRouter.use('/api/v1', providerRouter);
 appRouter.use('/api/v1', categoryRouter);
 appRouter.use('/api/v1', inventoryRouter);
+appRouter.use('/api/v1', catalogRouter);
 
 
 export default appRouter;

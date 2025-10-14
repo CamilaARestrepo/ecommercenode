@@ -38,6 +38,9 @@ export class MongoInventoryRepository implements IInventoryRepository {
     }
 
     if (action === 1) {
+      if (inventory.reservedStock+reservedStock>inventory.stock){
+        throw new Error("Reserved stock cannot exceed available stock");
+      }
       inventory.reservedStock += reservedStock;
     } else if (action === 2) {
       if (inventory.reservedStock - reservedStock < 0) {
