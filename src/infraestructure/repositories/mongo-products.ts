@@ -59,6 +59,7 @@ export class MongoProductRepository implements IProductRepository {
     });
   }
   async findById(id: string): Promise<Product> {
+    console.log(id)
     const product = await ProductModel.findById(id).exec();
     if (!product) {
       throw new Error("Product not found");

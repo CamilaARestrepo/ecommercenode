@@ -22,7 +22,6 @@ export class Catalog implements ICatalog{
         this.isDiscontinued=catalog.isDiscontinued;
         this.price=catalog.price;
         this.stock=catalog.stock;
-        this.reservedStock=catalog.reservedStock
-
+        this.reservedStock=catalog.reservedStock;
     }
 }

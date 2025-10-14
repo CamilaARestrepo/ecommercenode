@@ -3,7 +3,17 @@ import { ICatalogRepository } from "../../domain/repositories/ICatalog-repositor
 import { Catalog } from "../../domain/entities/Catalog";
 
 export class MongoCatalogRepository implements ICatalogRepository {
-  async getCatalog(): Promise<Catalog[]> {
+  async getCatalog(page: number = 1, limit: number = 10): Promise<{
+    catalogs: Catalog[],
+    total: number,
+    totalPages: number,
+    page: number,
+    limit: number
+  }> {
+    const skip = (page - 1) * limit;
+
+    const total = await InventoryModel.countDocuments({ stock: { $gt: 0 } });
+
     const activeInventories = await InventoryModel.find({ stock: { $gt: 0 } })
       .populate({
         path: "productId",
@@ -13,8 +23,10 @@ export class MongoCatalogRepository implements ICatalogRepository {
           select: "name",
         },
       })
+      .skip(skip)
+      .limit(limit)
       .exec();
-      console.log(activeInventories)
+
     const catalogs: Catalog[] = activeInventories.map((item) => {
       const product: any = item.productId;
 
@@ -31,8 +43,15 @@ export class MongoCatalogRepository implements ICatalogRepository {
         images: Array.isArray(product.images) ? product.images : [],
       });
     });
-    console.log (Catalog)
 
-    return catalogs;
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      catalogs,
+      total,
+      totalPages,
+      page,
+      limit
+    };
   }
 }

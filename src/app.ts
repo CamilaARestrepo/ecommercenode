@@ -4,6 +4,7 @@ import express, {Application, Request, Response} from 'express';
 import appRouter from './application/routes/app-router'
 import { dbConnection } from './infraestructure/config/config-db-mongo';
 import { JWTConfig } from './infraestructure/config/jwt-config';
+import './infraestructure/cron/inventoryCleanup'
 
 
 
