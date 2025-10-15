@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import userRouter from './users-route';
 import authRouter from './auth-route';
+import trackingRouter from './tracking-route';
 import productRouter from './product-route';
 import inventoryRouter from './inventory-route';
 import providerRouter from './provider-route';
@@ -30,6 +31,7 @@ appRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 appRouter.use('/api/v1', userRouter);
 appRouter.use('/api/v1', authRouter);
 appRouter.use('/api/v1', productRouter);
+appRouter.use('/api/v1', trackingRouter);
 appRouter.use('/api/v1', providerRouter);
 appRouter.use('/api/v1', categoryRouter);
 appRouter.use('/api/v1', inventoryRouter);

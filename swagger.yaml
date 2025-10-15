@@ -24,6 +24,8 @@ paths:
     post:
       tags: [Auth]
       summary: Authenticate a user and generate an access token
+      description: |
+        In addition to authenticating the user and generating a token, this endpoint now tracks login attempts and stores the user's email in the login attempts table for auditing purposes. After 3 failed login attempts, the user will be blocked and unable to log in.
       requestBody:
         required: true
         content:

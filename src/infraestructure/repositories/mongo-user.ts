@@ -50,7 +50,6 @@ export class MongoUserRepository implements IUserRepository {
         if (plainUser._id && typeof plainUser._id !== 'string') {
             plainUser._id = plainUser._id.toString();
         }
-        // Aquí el type assertion:
         return new User(plainUser as IUsers);
     }
 
