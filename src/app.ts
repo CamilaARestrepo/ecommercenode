@@ -5,7 +5,7 @@ import appRouter from './application/routes/app-router'
 import { dbConnection } from './infraestructure/config/config-db-mongo';
 import { JWTConfig } from './infraestructure/config/jwt-config';
 import { MongoUserRepository } from './infraestructure/repositories/mongo-user';
-
+import './infraestructure/observers';
 
 const PORT:number = Number(process.env.PORT);
 

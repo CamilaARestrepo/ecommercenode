@@ -3,6 +3,7 @@ import { TrackingStatus } from '../../domain/entities/Tracking';
 export interface CreateTrackingDTO {
   orderNumber: string;
   userId: string;
+  userEmail?: string;
 }
 
 export interface UpdateTrackingStatusDTO {

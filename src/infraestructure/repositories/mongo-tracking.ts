@@ -5,7 +5,6 @@
 
   export class MongoTrackingRepository implements ITrackingRepository {
     async createTracking(tracking: ITracking, changedBy?: string): Promise<ITracking> {
-      // Si changedBy se provee, agregarlo al primer statusHistory
       if (changedBy && tracking.statusHistory && tracking.statusHistory.length > 0) {
         tracking.statusHistory[0].changedBy = changedBy;
       }
@@ -36,6 +35,19 @@
       await TrackingModel.findOneAndUpdate(
         { trackingNumber },
         { $push: { notifications: notification } }
+      );
+    }
+
+    async updateNotification(trackingNumber: string, notificationId: string, patch: any): Promise<void> {
+      const set: any = {};
+      if (patch.sent !== undefined) set['notifications.$.sent'] = patch.sent;
+      if (patch.retries !== undefined) set['notifications.$.retries'] = patch.retries;
+      if (patch.message !== undefined) set['notifications.$.message'] = patch.message;
+      if (patch.timestamp !== undefined) set['notifications.$.timestamp'] = patch.timestamp;
+
+      await TrackingModel.findOneAndUpdate(
+        { trackingNumber, 'notifications._id': notificationId },
+        { $set: set }
       );
     }
 

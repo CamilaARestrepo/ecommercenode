@@ -7,6 +7,7 @@ export interface ITrackingMongo extends Document {
   trackingNumber: string;
   orderNumber: string;
   userId: string;
+  userEmail?: string;
   currentStatus: TrackingStatus;
   statusHistory: Array<{ status: TrackingStatus; timestamp: Date }>;
   notifications: Array<{ type: string; message: string; timestamp: Date; sent: boolean; retries: number }>;
@@ -19,6 +20,7 @@ const TrackingSchema: Schema = new Schema({
   trackingNumber: { type: String, required: false, unique: true },
   orderNumber: { type: String, required: true, unique: true },
   userId: { type: String, required: true },
+  userEmail: { type: String, required: false },
   currentStatus: { type: String, enum: Object.values(TrackingStatus), required: true },
   statusHistory: [
     {

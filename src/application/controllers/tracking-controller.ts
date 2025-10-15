@@ -17,9 +17,10 @@ export const getTrackingByUser = async (req: Request, res: Response) => {
 
 export const createTracking = async (req: Request, res: Response) => {
   try {
-    const { orderNumber, userId } = req.body;
+    const { orderNumber, userId, userEmail } = req.body;
     const changedBy = req.user?.email || 'System';
-    const tracking = await trackingService.createTracking({ orderNumber, userId }, changedBy);
+    const emailToStore = userEmail || req.user?.email;
+    const tracking = await trackingService.createTracking({ orderNumber, userId, userEmail: emailToStore }, changedBy);
     res.status(201).json(tracking);
   } catch (err) {
     res.status(500).json({ error: 'Error creating tracking', details: err });
