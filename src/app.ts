@@ -5,6 +5,7 @@ import appRouter from './application/routes/app-router'
 import { dbConnection } from './infraestructure/config/config-db-mongo';
 import { JWTConfig } from './infraestructure/config/jwt-config';
 import { MongoUserRepository } from './infraestructure/repositories/mongo-user';
+import { startNotificationRetryJob } from './infraestructure/jobs/notification-retry-job';
 import './infraestructure/observers';
 
 const PORT:number = Number(process.env.PORT);
@@ -18,6 +19,9 @@ dbConnection();
 
 MongoUserRepository.initialize();
 console.log('[APP] User repository initialized with verification code cleanup');
+
+// Inicializar job de reintentos de notificaciones
+startNotificationRetryJob();
 
 const app:Application = express();
 

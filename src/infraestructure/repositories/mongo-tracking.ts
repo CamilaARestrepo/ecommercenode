@@ -55,4 +55,18 @@
       const found = await TrackingModel.find({ userId });
       return found.map(doc => doc.toObject());
     }
+
+    // Devuelve una lista de { trackingNumber, userEmail, notification } para notificaciones pendientes
+    async findPendingNotifications(maxRetries: number): Promise<Array<{ trackingNumber: string; userEmail?: string; notification: any }>> {
+      // Proyección para filtrar documentos con notificaciones pendientes
+      const docs = await TrackingModel.find({ 'notifications.sent': false }).lean();
+      const results: Array<{ trackingNumber: string; userEmail?: string; notification: any }> = [];
+      for (const d of docs) {
+        const pending = (d.notifications || []).filter((n: any) => !n.sent && (n.retries || 0) < maxRetries);
+        for (const p of pending) {
+          results.push({ trackingNumber: d.trackingNumber, userEmail: d.userEmail, notification: p });
+        }
+      }
+      return results;
+    }
   }
