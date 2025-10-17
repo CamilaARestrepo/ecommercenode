@@ -1,259 +1,154 @@
 import { Order } from '../../../domain/entities/Order';
-import { IOrder, OrderStatus } from '../../../domain/models/interfaces/IOrder';
+import { IOrder, IOrderProduct, OrderStatus } from '../../../domain/models/interfaces/IOrder';
 
 describe('Order Entity', () => {
-    describe('Given complete order data', () => {
-        it('should create order with all properties correctly assigned', () => {
-            const orderData: IOrder = {
-                _id: 'order-123',
-                orderNumber: 'ORD-20241201-ABC12',
-                preorderId: 'pre-456',
-                userId: 'user-789',
-                products: [
-                    {
-                        productId: 'prod-1',
-                        name: 'Test Product',
-                        quantity: 2,
-                        price: 50,
-                        categoryId: 'cat-1',
-                        categoryName: 'Electronics'
-                    }
-                ],
-                shippingAddress: {
-                    country: 'Colombia',
-                    state: 'Antioquia',
-                    city: 'Medellin',
-                    neighborhood: 'Poblado',
-                    address: 'Calle 123 #45-67',
-                    postalCode: '050001'
-                },
-                paymentMethod: 'credit_card',
-                shippingCost: 10000,
-                total: 110000,
-                status: OrderStatus.PENDING,
-                createdAt: new Date('2024-01-01'),
-                updatedAt: new Date('2024-01-02'),
-                confirmedAt: new Date('2024-01-03'),
-                emailSent: true
-            };
+  const mockProduct: IOrderProduct = {
+    productId: 'prod-123',
+    name: 'Test Product',
+    quantity: 2,
+    price: 25000,
+    categoryId: 'cat-123'
+  };
 
-            const order = new Order(orderData);
+  const mockOrderData: IOrder = {
+    _id: 'order-123',
+    orderNumber: 'ORD-2024-001',
+    preorderId: 'preorder-123',
+    userId: 'user-123',
+    products: [mockProduct],
+    shippingAddress: {
+      country: 'Colombia',
+      state: 'Cundinamarca',
+      city: 'Bogotá',
+      neighborhood: 'Chapinero',
+      address: 'Calle 123 #45-67',
+      postalCode: '110111'
+    },
+    paymentMethod: 'credit_card',
+    shippingCost: 5000,
+    total: 55000,
+    status: OrderStatus.PENDING,
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    confirmedAt: new Date('2024-01-01'),
+    emailSent: true
+  };
 
-            expect(order._id).toBe('order-123');
-            expect(order.orderNumber).toBe('ORD-20241201-ABC12');
-            expect(order.preorderId).toBe('pre-456');
-            expect(order.userId).toBe('user-789');
-            expect(order.products).toHaveLength(1);
-            expect(order.products[0].productId).toBe('prod-1');
-            expect(order.shippingAddress.country).toBe('Colombia');
-            expect(order.paymentMethod).toBe('credit_card');
-            expect(order.shippingCost).toBe(10000);
-            expect(order.total).toBe(110000);
-            expect(order.status).toBe(OrderStatus.PENDING);
-            expect(order.emailSent).toBe(true);
-        });
+  test('should create an Order instance with all properties', () => {
+    const order = new Order(mockOrderData);
 
-        it('should be an instance of Order class', () => {
-            const orderData: IOrder = {
-                orderNumber: 'ORD-001',
-                preorderId: 'pre-1',
-                userId: 'user-1',
-                products: [],
-                shippingAddress: {
-                    country: 'Colombia',
-                    state: 'Antioquia',
-                    city: 'Medellin',
-                    neighborhood: 'Centro',
-                    address: 'Calle 1',
-                    postalCode: '050001'
-                },
-                paymentMethod: 'cash',
-                shippingCost: 0,
-                total: 100,
-                status: OrderStatus.PENDING,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                emailSent: false
-            };
+    expect(order._id).toBe('order-123');
+    expect(order.orderNumber).toBe('ORD-2024-001');
+    expect(order.preorderId).toBe('preorder-123');
+    expect(order.userId).toBe('user-123');
+    expect(order.products).toEqual([mockProduct]);
+    expect(order.shippingAddress.city).toBe('Bogotá');
+    expect(order.paymentMethod).toBe('credit_card');
+    expect(order.total).toBe(55000);
+    expect(order.status).toBe(OrderStatus.PENDING);
+    expect(order.emailSent).toBe(true);
+  });
 
-            const order = new Order(orderData);
+  test('should create an Order with default emailSent value', () => {
+    const orderData = { ...mockOrderData };
+    delete orderData.emailSent;
 
-            expect(order).toBeInstanceOf(Order);
-        });
+    const order = new Order(orderData);
+
+    expect(order.emailSent).toBe(false);
+    expect(order.orderNumber).toBe('ORD-2024-001');
+  });
+
+  test('should handle different order statuses', () => {
+    const confirmedOrder = new Order({
+      ...mockOrderData,
+      status: OrderStatus.CONFIRMED
     });
 
-    describe('Given minimal order data', () => {
-        it('should create order with default values', () => {
-            const minimalData: IOrder = {
-                orderNumber: 'ORD-MIN-001',
-                preorderId: 'pre-min',
-                userId: 'user-min',
-                products: [],
-                shippingAddress: {
-                    country: 'Colombia',
-                    state: 'Bogota',
-                    city: 'Bogota',
-                    neighborhood: 'Centro',
-                    address: 'Calle Principal',
-                    postalCode: '110001'
-                },
-                paymentMethod: 'cash',
-                shippingCost: 0,
-                total: 50,
-                status: OrderStatus.PENDING,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                emailSent: false
-            };
+    expect(confirmedOrder.status).toBe(OrderStatus.CONFIRMED);
+  });
 
-            const order = new Order(minimalData);
+  test('should handle multiple products in order', () => {
+    const secondProduct: IOrderProduct = {
+      productId: 'prod-456',
+      name: 'Second Product',
+      quantity: 1,
+      price: 15000,
+      categoryId: 'cat-456'
+    };
 
-            expect(order.orderNumber).toBe('ORD-MIN-001');
-            expect(order.products).toEqual([]);
-            expect(order.emailSent).toBe(false);
-            expect(order.confirmedAt).toBeUndefined();
-        });
+    const multiProductOrder = new Order({
+      ...mockOrderData,
+      products: [mockProduct, secondProduct],
+      total: 65000
     });
 
-    describe('Given different order statuses', () => {
-        const baseOrderData: IOrder = {
-            orderNumber: 'ORD-STATUS-001',
-            preorderId: 'pre-1',
-            userId: 'user-1',
-            products: [],
-            shippingAddress: {
-                country: 'Colombia',
-                state: 'Valle',
-                city: 'Cali',
-                neighborhood: 'Norte',
-                address: 'Carrera 1',
-                postalCode: '760001'
-            },
-            paymentMethod: 'debit_card',
-            shippingCost: 5000,
-            total: 75000,
-            status: OrderStatus.PENDING,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            emailSent: false
-        };
+    expect(multiProductOrder.products).toHaveLength(2);
+    expect(multiProductOrder.products[1].name).toBe('Second Product');
+    expect(multiProductOrder.total).toBe(65000);
+  });
 
-        it('should create order with PENDING status', () => {
-            const orderData = { ...baseOrderData, status: OrderStatus.PENDING };
-            const order = new Order(orderData);
+  test('should handle all order statuses', () => {
+    const statuses = [
+      OrderStatus.PENDING,
+      OrderStatus.CONFIRMED,
+      OrderStatus.PROCESSING,
+      OrderStatus.SHIPPED,
+      OrderStatus.DELIVERED,
+      OrderStatus.CANCELLED,
+      OrderStatus.REFUNDED
+    ];
 
-            expect(order.status).toBe(OrderStatus.PENDING);
-        });
+    statuses.forEach(status => {
+      const order = new Order({
+        ...mockOrderData,
+        status
+      });
+      expect(order.status).toBe(status);
+    });
+  });
 
-        it('should create order with CONFIRMED status', () => {
-            const orderData = { ...baseOrderData, status: OrderStatus.CONFIRMED };
-            const order = new Order(orderData);
-
-            expect(order.status).toBe(OrderStatus.CONFIRMED);
-        });
-
-        it('should create order with SHIPPED status', () => {
-            const orderData = { ...baseOrderData, status: OrderStatus.SHIPPED };
-            const order = new Order(orderData);
-
-            expect(order.status).toBe(OrderStatus.SHIPPED);
-        });
-
-        it('should create order with DELIVERED status', () => {
-            const orderData = { ...baseOrderData, status: OrderStatus.DELIVERED };
-            const order = new Order(orderData);
-
-            expect(order.status).toBe(OrderStatus.DELIVERED);
-        });
-
-        it('should create order with CANCELLED status', () => {
-            const orderData = { ...baseOrderData, status: OrderStatus.CANCELLED };
-            const order = new Order(orderData);
-
-            expect(order.status).toBe(OrderStatus.CANCELLED);
-        });
+  test('should handle zero shipping cost', () => {
+    const freeShippingOrder = new Order({
+      ...mockOrderData,
+      shippingCost: 0,
+      total: 50000
     });
 
-    describe('Given order with multiple products', () => {
-        it('should handle multiple products correctly', () => {
-            const orderData: IOrder = {
-                orderNumber: 'ORD-MULTI-001',
-                preorderId: 'pre-multi',
-                userId: 'user-multi',
-                products: [
-                    {
-                        productId: 'prod-1',
-                        name: 'Product 1',
-                        quantity: 2,
-                        price: 25000,
-                        categoryId: 'cat-1',
-                        categoryName: 'Electronics'
-                    },
-                    {
-                        productId: 'prod-2',
-                        name: 'Product 2',
-                        quantity: 1,
-                        price: 50000,
-                        categoryId: 'cat-2',
-                        categoryName: 'Clothing'
-                    }
-                ],
-                shippingAddress: {
-                    country: 'Colombia',
-                    state: 'Santander',
-                    city: 'Bucaramanga',
-                    neighborhood: 'Centro',
-                    address: 'Calle Real',
-                    postalCode: '680001'
-                },
-                paymentMethod: 'transfer',
-                shippingCost: 15000,
-                total: 115000,
-                status: OrderStatus.PENDING,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                emailSent: false
-            };
+    expect(freeShippingOrder.shippingCost).toBe(0);
+    expect(freeShippingOrder.total).toBe(50000);
+  });
 
-            const order = new Order(orderData);
+  test('should handle order without confirmedAt date', () => {
+    const orderData = { ...mockOrderData };
+    delete orderData.confirmedAt;
 
-            expect(order.products).toHaveLength(2);
-            expect(order.products[0].name).toBe('Product 1');
-            expect(order.products[1].name).toBe('Product 2');
-            expect(order.total).toBe(115000);
-        });
+    const order = new Order(orderData);
+
+    expect(order.confirmedAt).toBeUndefined();
+    expect(order.status).toBe(OrderStatus.PENDING);
+  });
+
+  test('should handle different payment methods', () => {
+    const paymentMethods = ['credit_card', 'debit_card', 'paypal', 'bank_transfer', 'cash'];
+
+    paymentMethods.forEach(method => {
+      const order = new Order({
+        ...mockOrderData,
+        paymentMethod: method
+      });
+      expect(order.paymentMethod).toBe(method);
     });
+  });
 
-    describe('Given order with confirmation date', () => {
-        it('should set confirmedAt when provided', () => {
-            const confirmedDate = new Date('2024-01-15');
-            const orderData: IOrder = {
-                orderNumber: 'ORD-CONF-001',
-                preorderId: 'pre-conf',
-                userId: 'user-conf',
-                products: [],
-                shippingAddress: {
-                    country: 'Colombia',
-                    state: 'Cundinamarca',
-                    city: 'Bogota',
-                    neighborhood: 'Chapinero',
-                    address: 'Zona Rosa',
-                    postalCode: '110001'
-                },
-                paymentMethod: 'credit_card',
-                shippingCost: 0,
-                total: 60000,
-                status: OrderStatus.CONFIRMED,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                confirmedAt: confirmedDate,
-                emailSent: true
-            };
+  test('should preserve complete shipping address', () => {
+    const order = new Order(mockOrderData);
 
-            const order = new Order(orderData);
-
-            expect(order.confirmedAt).toEqual(confirmedDate);
-            expect(order.status).toBe(OrderStatus.CONFIRMED);
-        });
-    });
+    expect(order.shippingAddress.country).toBe('Colombia');
+    expect(order.shippingAddress.state).toBe('Cundinamarca');
+    expect(order.shippingAddress.city).toBe('Bogotá');
+    expect(order.shippingAddress.neighborhood).toBe('Chapinero');
+    expect(order.shippingAddress.address).toBe('Calle 123 #45-67');
+    expect(order.shippingAddress.postalCode).toBe('110111');
+  });
 });

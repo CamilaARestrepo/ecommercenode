@@ -2,139 +2,76 @@ import { Categories } from '../../../domain/entities/Categories';
 import { ICategories } from '../../../domain/models/interfaces/ICategories';
 
 describe('Categories Entity', () => {
-    describe('Given complete category data', () => {
-        it('should create category with all properties correctly assigned', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'cat-123',
-                name: 'Electronics'
-            };
+  test('should create a Categories instance with all properties', () => {
+    const categoryData: ICategories = {
+      id: 'cat-123',
+      name: 'Electronics'
+    };
 
-            const category = new Categories(categoryData);
+    const category = new Categories(categoryData);
 
-            expect(category.id).toBe('cat-123');
-            expect(category.name).toBe('Electronics');
-        });
+    expect(category.id).toBe('cat-123');
+    expect(category.name).toBe('Electronics');
+  });
 
-        it('should be an instance of Categories class', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'clothing-123',
-                name: 'Clothing'
-            };
+  test('should create a Categories instance with different data', () => {
+    const categoryData: ICategories = {
+      id: 'cat-456',
+      name: 'Books & Literature'
+    };
 
-            const category = new Categories(categoryData);
+    const category = new Categories(categoryData);
 
-            expect(category).toBeInstanceOf(Categories);
-        });
-    });
+    expect(category.id).toBe('cat-456');
+    expect(category.name).toBe('Books & Literature');
+  });
 
-    describe('Given category without id', () => {
-        it('should create category with undefined id', () => {
-            const categoryData = {
-                name: 'Books'
-            };
+  test('should handle empty strings', () => {
+    const categoryData: ICategories = {
+      id: '',
+      name: ''
+    };
 
-            const category = new Categories(categoryData as any);
+    const category = new Categories(categoryData);
 
-            expect(category.name).toBe('Books');
-            expect(category.id).toBeUndefined();
-        });
-    });
+    expect(category.id).toBe('');
+    expect(category.name).toBe('');
+  });
 
-    describe('Given different category names', () => {
-        it('should create category with single word name', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'sports-1',
-                name: 'Sports'
-            };
+  test('should handle special characters in category names', () => {
+    const categoryData: ICategories = {
+      id: 'cat-special-123',
+      name: 'Electrónicos & Tecnología !@#$%'
+    };
 
-            const category = new Categories(categoryData);
+    const category = new Categories(categoryData);
 
-            expect(category.name).toBe('Sports');
-            expect(category.id).toBe('sports-1');
-        });
+    expect(category.id).toBe('cat-special-123');
+    expect(category.name).toBe('Electrónicos & Tecnología !@#$%');
+  });
 
-        it('should create category with multi-word name', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'home-garden-1',
-                name: 'Home & Garden'
-            };
+  test('should handle very long category names', () => {
+    const longName = 'A'.repeat(255);
+    const categoryData: ICategories = {
+      id: 'cat-long',
+      name: longName
+    };
 
-            const category = new Categories(categoryData);
+    const category = new Categories(categoryData);
 
-            expect(category.name).toBe('Home & Garden');
-            expect(category.id).toBe('home-garden-1');
-        });
+    expect(category.name).toBe(longName);
+    expect(category.name.length).toBe(255);
+  });
 
-        it('should create category with long descriptive name', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'automotive-parts-1',
-                name: 'Automotive Parts and Accessories'
-            };
+  test('should handle numeric-like strings', () => {
+    const categoryData: ICategories = {
+      id: '12345',
+      name: '999 Items Category'
+    };
 
-            const category = new Categories(categoryData);
+    const category = new Categories(categoryData);
 
-            expect(category.name).toBe('Automotive Parts and Accessories');
-            expect(category.id).toBe('automotive-parts-1');
-        });
-    });
-
-    describe('Given category with special characters', () => {
-        it('should handle category name with ampersand', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'health-beauty-1',
-                name: 'Health & Beauty'
-            };
-
-            const category = new Categories(categoryData);
-
-            expect(category.name).toBe('Health & Beauty');
-        });
-
-        it('should handle category name with parentheses', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'toys-games-1',
-                name: 'Toys & Games (Kids)'
-            };
-
-            const category = new Categories(categoryData);
-
-            expect(category.name).toBe('Toys & Games (Kids)');
-        });
-
-        it('should handle category name with numbers', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'tech-2024',
-                name: 'Tech 2024'
-            };
-
-            const category = new Categories(categoryData);
-
-            expect(category.name).toBe('Tech 2024');
-        });
-    });
-
-    describe('Given empty or minimal data', () => {
-        it('should create category with empty string name', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'empty-1',
-                name: ''
-            };
-
-            const category = new Categories(categoryData);
-
-            expect(category.name).toBe('');
-            expect(category.id).toBe('empty-1');
-        });
-
-        it('should create category with whitespace name', () => {
-            const categoryData: ICategories & { id?: string } = {
-                id: 'space-1',
-                name: '   '
-            };
-
-            const category = new Categories(categoryData);
-
-            expect(category.name).toBe('   ');
-        });
-    });
+    expect(category.id).toBe('12345');
+    expect(category.name).toBe('999 Items Category');
+  });
 });

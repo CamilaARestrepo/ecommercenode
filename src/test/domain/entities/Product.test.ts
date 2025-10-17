@@ -2,188 +2,143 @@ import { Product } from '../../../domain/entities/Product';
 import { IProduct } from '../../../domain/models/interfaces/IProduct';
 
 describe('Product Entity', () => {
-    describe('Given complete product data', () => {
-        it('should create product with all properties correctly assigned', () => {
-            const productData: IProduct & { id?: string; reservedStock?: number } = {
-                id: 'prod-123',
-                name: 'Test Product',
-                description: 'A test product description',
-                cost: 99.99,
-                categoryId: 'cat-456',
-                images: ['image1.jpg', 'image2.jpg'],
-                providers: ['prov-1', 'prov-2'],
-                reservedStock: 10,
-                isDiscontinued: false
-            };
+  test('should create a Product instance with all properties', () => {
+    const productData: IProduct = {
+      id: 'prod-123',
+      name: 'Test Product',
+      description: 'Test Description',
+      cost: 20000,
+      categoryId: 'cat-123',
+      images: ['image1.jpg', 'image2.jpg'],
+      providers: ['prov-1', 'prov-2'],
+      isDiscontinued: false
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.id).toBe('prod-123');
-            expect(product.name).toBe('Test Product');
-            expect(product.description).toBe('A test product description');
-            expect(product.cost).toBe(99.99);
-            expect(product.categoryId).toBe('cat-456');
-            expect(product.images).toEqual(['image1.jpg', 'image2.jpg']);
-            expect(product.providers).toEqual(['prov-1', 'prov-2']);
-            expect(product.reservedStock).toBeUndefined();
-            expect(product.isDiscontinued).toBe(false);
-        });
+    expect(product.id).toBe('prod-123');
+    expect(product.name).toBe('Test Product');
+    expect(product.description).toBe('Test Description');
+    expect(product.cost).toBe(20000);
+    expect(product.categoryId).toBe('cat-123');
+    expect(product.images).toEqual(['image1.jpg', 'image2.jpg']);
+    expect(product.providers).toEqual(['prov-1', 'prov-2']);
+    expect(product.isDiscontinued).toBe(false);
+  });
 
-        it('should be an instance of Product class', () => {
-            const productData: IProduct = {
-                name: 'Test Product',
-                description: 'Description',
-                cost: 50,
-                categoryId: 'cat1',
-                images: ['image.jpg'],
-                providers: ['prov-1']
-            };
+  test('should create a Product with default values', () => {
+    const productData: IProduct = {
+      name: 'Basic Product',
+      description: 'Basic Description',
+      cost: 15000,
+      categoryId: 'cat-456',
+      providers: []
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product).toBeInstanceOf(Product);
-        });
-    });
+    expect(product.id).toBe('');
+    expect(product.name).toBe('Basic Product');
+    expect(product.providers).toEqual([]);
+    expect(product.isDiscontinued).toBe(false);
+    expect(product.images).toBeUndefined();
+  });
 
-    describe('Given minimal required data', () => {
-        it('should create product with default values', () => {
-            const minimalData: IProduct = {
-                name: 'Minimal Product',
-                description: 'Minimal description',
-                cost: 25.50,
-                categoryId: 'cat-minimal',
-                images: ['minimal.jpg'],
-                providers: []
-            };
+  test('should handle discontinued products', () => {
+    const productData: IProduct = {
+      name: 'Old Product',
+      description: 'Discontinued item',
+      cost: 0,
+      categoryId: 'cat-789',
+      providers: [],
+      isDiscontinued: true
+    };
 
-            const product = new Product(minimalData);
+    const product = new Product(productData);
 
-            expect(product.name).toBe('Minimal Product');
-            expect(product.description).toBe('Minimal description');
-            expect(product.cost).toBe(25.50);
-            expect(product.categoryId).toBe('cat-minimal');
-            expect(product.images).toEqual(['minimal.jpg']);
-            expect(product.providers).toEqual([]);
-            expect(product.isDiscontinued).toBe(false);
-            expect(product.id).toBe('');
-        });
-    });
+    expect(product.isDiscontinued).toBe(true);
+    expect(product.cost).toBe(0);
+    expect(product.providers).toEqual([]);
+  });
 
-    describe('Given product without optional fields', () => {
-        it('should set default values for optional fields', () => {
-            const productData: IProduct = {
-                name: 'Product Without Optionals',
-                description: 'Description',
-                cost: 100,
-                categoryId: 'cat1',
-                images: ['image.jpg'],
-                providers: []
-            };
+  test('should handle multiple providers', () => {
+    const productData: IProduct = {
+      name: 'Multi-Provider Product',
+      description: 'Available from multiple sources',
+      cost: 25000,
+      categoryId: 'cat-multi',
+      providers: ['prov-1', 'prov-2', 'prov-3', 'prov-4']
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.providers).toEqual([]);
-            expect(product.isDiscontinued).toBe(false);
-            expect(product.reservedStock).toBeUndefined();
-        });
-    });
+    expect(product.providers).toHaveLength(4);
+    expect(product.providers).toContain('prov-1');
+    expect(product.providers).toContain('prov-4');
+  });
 
-    describe('Given product with empty arrays', () => {
-        it('should handle empty images array', () => {
-            const productData: IProduct = {
-                name: 'No Images Product',
-                description: 'Product without images',
-                cost: 75,
-                categoryId: 'cat1',
-                images: [],
-                providers: []
-            };
+  test('should handle multiple images', () => {
+    const productData: IProduct = {
+      name: 'Product with Images',
+      description: 'Has multiple product images',
+      cost: 35000,
+      categoryId: 'cat-images',
+      providers: ['prov-1'],
+      images: ['img1.jpg', 'img2.png', 'img3.webp']
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.images).toEqual([]);
-        });
+    expect(product.images).toHaveLength(3);
+    expect(product.images).toContain('img1.jpg');
+    expect(product.images).toContain('img3.webp');
+  });
 
-        it('should handle empty providers array', () => {
-            const productData: IProduct = {
-                name: 'No Providers Product',
-                description: 'Product without providers',
-                cost: 60,
-                categoryId: 'cat1',
-                images: ['image.jpg'],
-                providers: []
-            };
+  test('should handle high cost values', () => {
+    const productData: IProduct = {
+      name: 'Expensive Product',
+      description: 'Premium high-cost item',
+      cost: 9999999,
+      categoryId: 'cat-premium',
+      providers: ['prov-premium']
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.providers).toEqual([]);
-        });
-    });
+    expect(product.cost).toBe(9999999);
+    expect(product.name).toBe('Expensive Product');
+  });
 
-    describe('Given product with discontinued status', () => {
-        it('should create discontinued product', () => {
-            const productData: IProduct = {
-                name: 'Discontinued Product',
-                description: 'This product is discontinued',
-                cost: 0,
-                categoryId: 'cat1',
-                images: ['discontinued.jpg'],
-                providers: [],
-                isDiscontinued: true
-            };
+  test('should handle special characters in product data', () => {
+    const productData: IProduct = {
+      name: 'Producto Especial áéíóú ñ !@#$%',
+      description: 'Descripción con caracteres especiales & símbolos',
+      cost: 45000,
+      categoryId: 'cat-special-ñ',
+      providers: ['prov-español']
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.isDiscontinued).toBe(true);
-        });
+    expect(product.name).toBe('Producto Especial áéíóú ñ !@#$%');
+    expect(product.description).toBe('Descripción con caracteres especiales & símbolos');
+    expect(product.providers[0]).toBe('prov-español');
+  });
 
-        it('should create active product by default', () => {
-            const productData: IProduct = {
-                name: 'Active Product',
-                description: 'This product is active',
-                cost: 150,
-                categoryId: 'cat1',
-                images: ['active.jpg'],
-                providers: []
-            };
+  test('should handle empty arrays for images and providers', () => {
+    const productData: IProduct = {
+      name: 'Minimal Product',
+      description: 'Product with empty arrays',
+      cost: 10000,
+      categoryId: 'cat-minimal',
+      providers: [],
+      images: []
+    };
 
-            const product = new Product(productData);
+    const product = new Product(productData);
 
-            expect(product.isDiscontinued).toBe(false);
-        });
-    });
-
-    describe('Given product with reserved stock', () => {
-        it('should set reserved stock correctly', () => {
-            const productData: IProduct & { reservedStock?: number } = {
-                name: 'Reserved Stock Product',
-                description: 'Product with reserved stock',
-                cost: 200,
-                categoryId: 'cat1',
-                images: ['reserved.jpg'],
-                providers: [],
-                reservedStock: 25
-            };
-
-            const product = new Product(productData);
-
-            expect(product.reservedStock).toBeUndefined();
-        });
-
-        it('should handle zero reserved stock', () => {
-            const productData: IProduct & { reservedStock?: number } = {
-                name: 'Zero Reserved Product',
-                description: 'Product with zero reserved stock',
-                cost: 80,
-                categoryId: 'cat1',
-                images: ['zero.jpg'],
-                providers: [],
-                reservedStock: 0
-            };
-
-            const product = new Product(productData);
-
-            expect(product.reservedStock).toBeUndefined();
-        });
-    });
+    expect(product.providers).toEqual([]);
+    expect(product.images).toEqual([]);
+    expect(product.isDiscontinued).toBe(false);
+  });
 });
