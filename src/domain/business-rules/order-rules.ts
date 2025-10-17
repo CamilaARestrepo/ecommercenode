@@ -63,7 +63,7 @@ export const deductInventoryStock = async (
             reservedStock: Math.max(inventory.reservedStock - product.quantity, 0)
         };
 
-        await inventoryRepo.updateInventory(product.productId, updatedInventory);
+        await inventoryRepo.update(product.productId, updatedInventory);
     }
 };
 
