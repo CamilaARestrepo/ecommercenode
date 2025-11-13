@@ -134,6 +134,158 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /api/v1/user/profile/{id}:
+    put:
+      tags:
+        - User
+      summary: Update a user profile (full update)
+      description: Updates the full user profile. Requires authentication and profile access authorization.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '403':
+          description: Forbidden - cannot update another profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      tags:
+        - User
+      summary: Partially update a user profile
+      description: Partially updates user profile fields. Requires authentication and profile access authorization.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User partially updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - User
+      summary: Get user profile
+      description: Retrieve a user profile by id. Requires authentication and profile access authorization.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Retrieve a list of all users.
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+
   /api/v1/product:
     get:
       tags: [Product]
@@ -780,7 +932,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
 
-  /api/v1/admin/product//provider:
+  /api/v1/admin/product/provider:
     get:
       tags:
         - Providers
@@ -1119,6 +1271,138 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerErrorResponse'
 
+  /auth/verify-email:
+    post:
+      summary: Verifica el código de correo electrónico del usuario.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@correo.com
+                code:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: Verificación exitosa.
+        "400":
+          description: Código inválido o expirado.
+
+  /auth/resend-verification-code:
+    post:
+      summary: Reenvía el código de verificación al correo del usuario.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@correo.com
+      responses:
+        "200":
+          description: Código reenviado correctamente.
+        "400":
+          description: Error al reenviar el código.
+
+  /api/v1/tracking:
+    post:
+      tags:
+        - Tracking
+      summary: Create tracking for an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingRequest'
+      responses:
+        '201':
+          description: Tracking created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingResponse'
+
+  /api/v1/tracking/{orderNumber}:
+    get:
+      tags:
+        - Tracking
+      summary: Get tracking by order number
+      parameters:
+        - name: orderNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tracking information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingResponse'
+        '404':
+          description: Tracking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/tracking/user/{userId}:
+    get:
+      tags:
+        - Tracking
+      summary: Get tracking entries for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of tracking entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackingResponse'
+
+  /api/v1/tracking/status:
+    put:
+      tags:
+        - Tracking
+      summary: Update tracking status
+      description: Update the status of a tracking entry. Requires authentication.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackingStatusUpdate'
+      responses:
+        '200':
+          description: Tracking status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingResponse'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -1278,6 +1562,38 @@ components:
           type: string
         status:
           type: string
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        neighborhood:
+          type: string
+        address:
+          type: string
+        postalCode:
+          type: string
+
+    UserUpdateRequest:
+      type: object
+      description: Fields allowed for partial user updates (all optional)
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        roleId:
+          type: string
+          enum: [USER, ADMIN]
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE, BLOCKED]
         country:
           type: string
         state:
@@ -1932,3 +2248,101 @@ components:
         emailSent:
           type: boolean
           example: true
+    
+    # Tracking Schemas
+    TrackingRequest:
+      type: object
+      required:
+        - orderNumber
+        - status
+      properties:
+        orderNumber:
+          type: string
+          description: Order number associated with the tracking
+        status:
+          type: string
+          description: Initial tracking status
+          example: PENDING
+        location:
+          type: string
+          description: Current location info (optional)
+        details:
+          type: string
+          description: Additional details about the tracking
+
+    TrackingResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        orderNumber:
+          type: string
+        status:
+          type: string
+        location:
+          type: string
+        details:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+
+    TrackingStatusUpdate:
+      type: object
+      required:
+        - orderNumber
+        - status
+      properties:
+        orderNumber:
+          type: string
+        status:
+          type: string
+        location:
+          type: string
+        details:
+          type: string
+  /auth/verify-email:
+    post:
+      summary: Verifica el código de correo electrónico del usuario.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@correo.com
+                code:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: Verificación exitosa.
+        "400":
+          description: Código inválido o expirado.
+
+  /auth/resend-verification-code:
+    post:
+      summary: Reenvía el código de verificación al correo del usuario.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@correo.com
+      responses:
+        "200":
+          description: Código reenviado correctamente.
+        "400":
+          description: Error al reenviar el código.
+

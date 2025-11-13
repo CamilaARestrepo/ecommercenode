@@ -29,6 +29,7 @@ userRouter.post('/user/test-email', async (req: Request, res: Response) => {
     const emailService = new NodemailerEmailService();
     
     const result = await emailService.sendVerificationCode(
+        //para efectos de prueba pon tu usuario
         'norbeymejiacortes@gmail.com', // ✅ Email específico sin comillas extras
         'Test User',
         '123456'

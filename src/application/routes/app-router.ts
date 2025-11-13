@@ -28,12 +28,12 @@ appRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 appRouter.use('/api/v1', userRouter);
 appRouter.use('/api/v1', authRouter);
-appRouter.use('/api/v1', productRouter);
 appRouter.use('/api/v1', trackingRouter);
 appRouter.use('/api/v1', providerRouter);
 appRouter.use('/api/v1', categoryRouter);
 appRouter.use('/api/v1', inventoryRouter);
 appRouter.use('/api/v1', catalogRouter);
+appRouter.use('/api/v1', productRouter);
 appRouter.use('/api/v1', preorderRouter);
 appRouter.use('/api/v1/orders', orderRouter);
 

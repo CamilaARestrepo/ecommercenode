@@ -4,6 +4,6 @@ import { authenticateToken, authorizeRole } from '../middlewares/auth-middleware
 
 const catalogRouter = express.Router();
 
-catalogRouter.get('/catalog',authenticateToken,authorizeRole(["admin","user"]),getCatalog)
+catalogRouter.get('/catalog',getCatalog)
 
 export default catalogRouter;
