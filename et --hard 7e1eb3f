@@ -1,0 +1,63 @@
+[33m6efd5db[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mCamila[m[33m)[m Merge branch 'feature/tracking' into Camila
+[33m15ca7cd[m[33m ([m[1;31mupstream/feature/tracking[m[33m, [m[1;32mfeature/tracking[m[33m)[m Enhance createTracking to retrieve user email from database if not provided
+[33m112dd07[m Merge branch 'feature/products' into Camila
+[33m7e1eb3f[m Mensaje descriptivo de lo que hiciste
+[33m09a9029[m Add WebSocket support for real-time tracking updates and notifications
+[33md7c5bd4[m[33m ([m[1;31mupstream/feature/products[m[33m, [m[1;31morigin/feature/products[m[33m, [m[1;32mfeature/products[m[33m)[m fix conflicts
+[33mfdf9b9f[m Implementation of node-cache in the catalog query, the cache is cleared when modifying the inventory or making a stock reservation.
+[33mc09eb43[m[33m ([m[1;31mupstream/develop[m[33m, [m[1;31mupstream/HEAD[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m Merge pull request #10 from NMEJIA93/feature/test
+[33m1e11cfc[m[33m ([m[1;31mupstream/feature/test[m[33m, [m[1;31morigin/feature/test[m[33m)[m test al 76 %
+[33md20dfec[m Merge branch 'feature/test' of https://github.com/NMEJIA93/electiva2_ecommerce_enviosperdidos into feature/test
+[33m094401a[m add test
+[33mb39aef2[m Add unit tests for notification dispatcher and repository interfaces
+[33m86dc1d4[m Add comprehensive tests for application middlewares and routes
+[33md6af514[m feat: add comprehensive unit tests for controllers, services, entities and business rules
+[33mf6ceb51[m Merge pull request #9 from NMEJIA93/feature/products
+[33mae5de94[m #feature/products
+[33md92407e[m Merge pull request #8 from NMEJIA93/feature/tracking
+[33mb37b123[m[33m ([m[1;31morigin/feature/tracking[m[33m)[m #feature/tracking
+[33m2f25bcd[m #feature/tracking
+[33m00ca717[m #feature/tracking
+[33mba6e9e2[m Implement getInventoryById with full product details, add reservations array in inventory, schedule cron job to remove expired reservations, and update catalog repository to support pagination
+[33m9992fae[m Implemented active product catalog with union between inventory and product. Correction of models and population of categories. Cascade elimination with reserved stock validation. Improvement in validations of reserved stock (do not exceed available stock).
+[33ma7a2cb1[m Feature/users (#7)
+[33m2654bb0[m update develop
+[33m7d6c468[m Feature/checkout (#6)
+[33mfb6fa03[m #feature/tracking
+[33m1d69cc3[m #feature/tracking
+[33m42dc747[m[33m ([m[1;31mupstream/feature/tokent[m[33m, [m[1;31morigin/feature/tokent[m[33m)[m #feature/tokent
+[33m6a5c46b[m merge
+[33mdd7a493[m Merge branch 'develop' of https://github.com/NMEJIA93/electiva2_ecommerce_enviosperdidos into develop
+[33m461b163[m merge
+[33mdd1549e[m update product-mongo
+[33m0493081[m merge
+[33mc228430[m merge to develop
+[33md23b35e[m Merge branch 'feature/products' into feature/users
+[33m697c43a[m Feature/users (#3)
+[33m188ee39[m The process begins to create the inventory. When creating a product, an inventory is added, associating it with the product ID and when deleting a product, it is also removed from the inventory. The put method is used to update the inventory, stock, and price, and patch where action 1 or 2 goes in the body, which is used to add or subtract from the reserved stock.
+[33me9b0771[m Completed full CRUD for products, including association with providers and categories. Full CRUD for categories was also implemented. Business rules were added: categories with associated products cannot be deleted, and when adding products, it is verified that the assigned provider and category exist.
+[33ma6886c0[m feature/tokent
+[33m10e8490[m update dir name business-rules
+[33m96ea779[m ADD - test with jest
+[33m5b51be5[m add dir user-Cases
+[33mc43a3ae[m add middleware authorizeProfileAcces
+[33m8d10b5b[m Middleware is updated for verification of the person's role, and crud is performed for providers.
+[33m42584a5[m add endpoint getAllUsers
+[33ma2f5b1b[m Implement product validation middleware and add role authorization
+[33m53061ac[m Product module implementation: Added routes, controllers, services, and repositories for product management.
+[33m136e77a[m merge branch deiby
+[33mfaddea1[m Merge pull request #2 from NMEJIA93/feature/tokent
+[33m86ba601[m Merge branch 'develop' into feature/tokent
+[33m48b44ab[m #feature/tokent
+[33m797f839[m Merge pull request #1 from NMEJIA93/feature/users
+[33m712d88d[m Endpoint GET by ID
+[33m53d17c4[m ADD - swagger and Readme
+[33me47544c[m ADD- flow post user
+[33m6496cd2[m ADD - implement database connection
+[33m2dd9ef0[m add service user
+[33m74f242e[m ADD - IUser interface
+[33m4e73762[m add validation birthDate
+[33mce3e634[m ADD - controller createUser
+[33m6a50114[m ADD - enviroment
+[33m1219df0[m init project
+[33m443f869[m Initial commit

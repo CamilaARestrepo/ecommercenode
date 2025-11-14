@@ -48,4 +48,5 @@ export const updateTrackingStatus = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json({ error: 'Error updating status', details: err });
   }
+  
 };
