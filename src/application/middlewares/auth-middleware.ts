@@ -57,40 +57,14 @@ export function authorizeProfileAccess(request: Request, response: Response, nex
 }
 
 export function authorizeUserAccess(request: Request, response: Response, next: NextFunction) {
-    const userIdFromToken = request.user?.id;
-    const userIdFromParams = request.params.userId;
+    const role = request.user?.roleId?.toLowerCase();
+    const isAdmin = role === 'admin';
+    const isUser = role === 'user';
 
-
-    if (!userIdFromToken) {
-        return response.status(401).json({
-            ok: false,
-            message: 'User authentication required'
-        });
-    }
-
-    if (!userIdFromParams) {
-        return response.status(400).json({
-            ok: false,
-            message: 'User ID is required'
-        });
-    }
-
-
-    const tokenUserId = String(userIdFromToken);
-    const paramUserId = String(userIdFromParams);
-    
-    const isAdmin = request.user?.roleId?.toLowerCase() === 'admin';
-    
-    if (tokenUserId !== paramUserId && !isAdmin) {
+    if (!isAdmin && !isUser) {
         return response.status(403).json({
             ok: false,
-            message: 'You do not have permission to access this user resource',
-            debug: {
-                userIdFromToken: tokenUserId,
-                userIdFromParams: paramUserId,
-                userFromToken: request.user,
-                isAdmin: isAdmin
-            }
+            message: 'You do not have permission to perform this action. Only admin or user roles are allowed.'
         });
     }
 
@@ -123,8 +97,20 @@ export function authorizePreorderConfirmation(request: Request, response: Respon
         });
     }
 
-    // Validate that the user from token matches the user from params
-    if (userIdFromToken !== userIdFromParams) {
+    const role = request.user?.roleId?.toLowerCase();
+    const isAdmin = role === 'admin';
+    const isUser = role === 'user';
+
+    // Solo permitir si el rol es admin o user
+    if (!isAdmin && !isUser) {
+        return response.status(403).json({
+            ok: false,
+            message: 'You do not have permission to perform this action. Only admin or user roles are allowed.'
+        });
+    }
+
+    // Permitir si es el mismo usuario o si es admin
+    if (userIdFromToken !== userIdFromParams && !isAdmin) {
         return response.status(403).json({
             ok: false,
             message: 'You do not have permission to confirm preorders for this user'
