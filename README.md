@@ -6,6 +6,10 @@ Backend API (Node.js + TypeScript) para gestión de usuarios, productos, proveed
 Sigue **Hexagonal Architecture** (Ports & Adapters) y principios **DDD**.  
 Incluye validaciones robustas, autenticación JWT, y persistencia en MongoDB (Mongoose).
 
+
+### Cambios para el Jenkins
+- Este es un mensaje escrito por ricardo para ver si funciona esta cosa! xDs
+
 ---
 
 ## 🛠️ Tech Stack
