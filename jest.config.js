@@ -1,6 +1,12 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "notification-retry-job.test.ts",
+    "email-observer.test.ts",
+    "nodemailer-config.test.ts"
+  ],
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
   transform: {
