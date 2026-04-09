@@ -39,4 +39,5 @@ app.use(appRouter);
 app.listen(PORT, ()=>{
     console.log(`[APP] Server running on port ${PORT}`);
     console.log(`[APP] Server URL: http://localhost:${PORT}`);
+     console.log(`[APP] ahora no `);
 })
